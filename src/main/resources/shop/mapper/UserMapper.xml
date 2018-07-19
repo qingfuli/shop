@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="shop.mapper.UserMapper">
+ 	
+ 	<insert id="create" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+ 		insert into USERS(USERNAME, PASSWORD, DESCRIPTION)
+ 		values(#{username}, #{password}, #{description})
+ 	</insert>
+ 	
+ 	<select id="findOneByUsername" resultType="User">
+ 		select 
+ 			ID id, USERNAME username, PASSWORD password, DESCRIPTION description 
+		from USERS
+		where USERNAME = #{username}
+ 	</select>
+ 	
+</mapper>
