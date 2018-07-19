@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -16,15 +18,30 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
     // 默认所有请求都需要登录，对于这个后台管理系统来说，可以不改
     
-    @Bean
-    public UserDetailsService userDetailsService() {
-        // 提供用户详情，用于检查登录的用户名和密码
-        InMemoryUserDetailsManager um = new InMemoryUserDetailsManager();
-        um.createUser(User
-                .withUsername("zs")
-                .password("$2a$10$pyhoz7k3QLux1jrJmuE.ZOenAbfrGpa8cSMYa4xs9reYaDsUyXsfG")
-                .authorities("图书管理员").build());
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+			.authorizeRequests() 
+			.antMatchers("/login", "/", "/register").permitAll()
+			.antMatchers("/**").authenticated() 
 
-        return um;
-    }
+			.and()
+
+			.sessionManagement() 
+				.maximumSessions(1) 
+				.sessionRegistry(sessionRegistry()) 
+				.and()
+
+			.and()
+
+			.formLogin() 
+			.loginPage("/login") 
+			.defaultSuccessUrl("/");
+		
+	}
+	
+	@Bean
+	public SessionRegistry sessionRegistry() {
+		return new SessionRegistryImpl();
+	}
 }

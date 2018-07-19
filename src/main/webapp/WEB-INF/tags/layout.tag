@@ -24,9 +24,9 @@
 <body>
 	<div class="header">
 		<ul>
-			<sec:authentication property="principal.username" var="username" />
-			<c:if test="${username != null }">
-				<li>${username} 
+			<sec:authentication property="principal" var="principal" />
+			<c:if test="${principal != 'anonymousUser' }">
+				<li>${principal.username} 
 				      <form action="${contextPath}/logout" method="post" style="display: inline;">
         				<sec:csrfInput />
         				<button type="submit">退出</button>
@@ -34,10 +34,10 @@
 				</li>
 			</c:if>
 			
-			<c:if test="${username == null }">
+			<c:if test="${principal == 'anonymousUser' }">
 				<li>
-					<a href="">注册</a>
-					<a href="">登录</a>
+					<a href="${contextPath}/register">注册</a>
+					<a href="${contextPath}/login">登录</a>
 				</li>
 			</c:if>
 		</ul>

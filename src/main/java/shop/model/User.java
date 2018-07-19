@@ -1,7 +1,11 @@
 package shop.model;
 
+import java.util.Collection;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.springframework.security.core.GrantedAuthority;
 
 public class User {
 	private Long id;
@@ -14,6 +18,7 @@ public class User {
 	
 	@Size(max = 1024, message="小于1024")
 	private String description;
+	
 	
 	public User() {
 	}
